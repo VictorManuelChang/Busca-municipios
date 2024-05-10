@@ -1,39 +1,8 @@
-# libfacom
+# Busca de Municípios do Brasil
 
-# compilar diretamente diversos arquivos
+Este projeto consiste na implementação de uma tabela hash para armazenar informações sobre os 5570 municípios existentes no Brasil. Além disso, utiliza uma KD Tree para localizar municípios vizinhos com base na latitude e longitude de cada município.
 
-Se você estiver dentro da pasta de teste executar
-```
-gcc ../src/<algoritmo>.c <test_algoritmo>.c -o <executavel>
-```
+## Funcionalidades
 
-Exemplo para compilar a hash quando estiver dentro da pasta de test
-
-```
-gcc ../src/hash.c test_hash.c -o hash
-```
-
-
-
-
-# compilar dinamicamente
-
-1. compilar os modulos objetos .o
-```
-gcc -c -fpic heap.c
-```
-verificação: veja se foram criados os modulos .o
-
-2. criar a biblioteca
-```
-gcc -shared -o libfacom.so heap.o
-```
-
-3. compilar o executável
-```
-gcc -L. -o main main.c -lfacom 
-```
-4. ajustar o LD_LIBRARY_PATH
-```
-export LD_LIBRARY_PATH=CAMINHO_PASTA_ATUAL
-```
+- Armazenamento de informações sobre os municípios brasileiros em uma tabela hash.
+- Busca eficiente de municípios vizinhos utilizando uma KD Tree.
