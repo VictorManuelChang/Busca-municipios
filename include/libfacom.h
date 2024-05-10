@@ -16,16 +16,5 @@ void * hash_busca(thash h, const char * key);
 int hash_remove(thash * h, const char * key);
 void hash_apaga(thash *h);
 
-/* ABB*/
 
-typedef struct _tnode{
-    void * reg;
-    struct _tnode *esq;
-    struct _tnode *dir;
-}tnode;
-
-typedef struct _abb{
-    tnode * raiz;
-    int (*cmp)(void* , void *);
-}tarv;
 #endif
