@@ -3,7 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-#define SEED    0x12345678
+#define SEED  0x12345678
+#define SEED2 0x21d9f3
 #include "../include/libfacom.h"
 
 uint32_t hashf(const char* str, uint32_t h){
@@ -18,25 +19,35 @@ uint32_t hashf(const char* str, uint32_t h){
 }
 
 
+
 int hash_insere(thash * h, void * bucket){
-    uint32_t hash = hashf(h->get_key(bucket),SEED);
-    int pos = hash %(h->max);
-    /*se esta cheio*/
-    if (h->max == (h->size+1)){
+    uint32_t hash = hashf(h->get_key(bucket), SEED);
+    int pos = hash % h->max;
+    int passo = (SEED2 - (hash % SEED2)) % h->max;
+    int tentativas = 0;
+
+    /* se estiver cheio */
+    if (h->size == h->max) {
         free(bucket);
         return EXIT_FAILURE;
-    }else{  /*fazer a insercao*/
-        while(h->table[pos] != 0){
-            if (h->table[pos] == h->deleted)
-                break;
-            pos = (pos+1)%h->max;
-        }
-        h->table[pos] = (uintptr_t)bucket;
-        h->size +=1;
     }
+
+    /* fazer a inserção */
+    while (h->table[pos] != 0 && h->table[pos] != h->deleted) {
+        pos = (pos + passo) % h->max;
+        tentativas++;
+        if (tentativas > 15) {
+            
+            free(bucket);
+            return EXIT_FAILURE;
+        }
+    }
+
+    h->table[pos] = (uintptr_t)bucket;
+    h->size++;
+
     return EXIT_SUCCESS;
 }
-
 
 
 int hash_constroi(thash * h,int nbuckets, char * (*get_key)(void *) ){

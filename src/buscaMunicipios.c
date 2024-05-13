@@ -6,6 +6,7 @@
 #include "../include/libfacom.h"
 #include "../include/cJSON.h"
 
+
 typedef struct
 {
     char codigo_ibge[8];
@@ -19,9 +20,9 @@ typedef struct
     char fuso_horario[50];
 } tmunicipios;
 
-char *int_to_str(int number)
+char *int_para_string(int number)
 {
-    char *str = malloc(sizeof(char) * 9); // espaço para 8 dígitos e o terminador nulo
+    char *str = malloc(sizeof(char) * 9); 
     sprintf(str, "%d", number);
     return str;
 }
@@ -47,6 +48,7 @@ void *aloca_municipio(char *codigo_ibge, char *nome, float latitude, float longi
 
     return municipio;
 }
+
 
 int main()
 {
@@ -75,7 +77,7 @@ int main()
     }
 
     thash h;
-    int nbuckets = 10000;
+    int nbuckets = 30000;
     hash_constroi(&h, nbuckets, get_key);
 
 
@@ -94,7 +96,7 @@ int main()
         int ddd = cJSON_GetObjectItem(objeto, "ddd")->valueint;
         char *fuso_horario = cJSON_GetObjectItem(objeto, "fuso_horario")->valuestring;
 
-        char *codigo_ibge = int_to_str(codigo_ibgeAux);
+        char *codigo_ibge = int_para_string(codigo_ibgeAux);
         hash_insere(&h, aloca_municipio(codigo_ibge, nome, latitude, longitude, capital, codigo_uf, siafi_id, ddd, fuso_horario));
         free(codigo_ibge);
     }
@@ -119,13 +121,6 @@ int main()
     printf("Siafi_id: %d\n", municipio->siafi_id);
     printf("DDD: %d\n", municipio->ddd);
     printf("fuso_horario: %s\n", municipio->fuso_horario);
-
-    int n = 3;
-
-
-
-
-
 
     hash_apaga(&h);
     cJSON_Delete(json);
